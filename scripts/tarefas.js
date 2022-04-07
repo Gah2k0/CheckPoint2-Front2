@@ -2,6 +2,15 @@ let nomeUsuarioReference = document.querySelector('#nomeUsuario');
 let idUsuario;
 let emailUsuario;
 let containerReference = document.querySelector('.tarefas-pendentes')
+let finalizarSessaoReference = document.querySelector('#closeApp')
+let criarTarefaReference = document.querySelector('#criaTarefa')
+let inputTarefaReference = document.querySelector('novaTarea')
+
+function logOutUser() {
+    localStorage.removeItem('token') 
+    window.location.href = './index.html'
+}
+
 
 let requestConfiguration = {
 
@@ -17,6 +26,18 @@ let requestConfiguration = {
 fetch('https://ctd-todo-api.herokuapp.com/v1/users/getMe', requestConfiguration).then(
 
     response => {
+
+        if(response.ok) {
+
+        } else {
+            if(response.status === 401) {
+                
+                logOutUser()
+
+            } 
+        }
+
+        
 
         response.json().then(
 
@@ -61,37 +82,43 @@ fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfiguration).then(
 
 
 
+finalizarSessaoReference.addEventListener('click',  function logOutUser() {
+    localStorage.removeItem('token') 
+    window.location.href = './index.html'
+})
+
+
+// criarTarefaReference.addEventListener('click', function(){
+
+//     let task = {
+//         description: inputTarefaReference.value,
+//         completed: false
+//     }
+
+//     let requestConfigurationPost = {
+
+//         headers: {
+
+//             'Content-Type': 'application/json',
+//             'Authorization': localStorage.getItem('token')
+            
+//         },
+//         method: 'POST',
+//         body: JSON.stringify(task)
+
+//     }
+
+
+//     fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfigurationPost).then (
+
+//     )
+// }
+  
+
+
 
 // completed: false
 // createdAt: "2022-03-30T20:34:05.693Z"
 // description: "Aprender Javascript"
 // id: 5241
 // userId: 51
-
-// for(let tarefa of tarefas) {
-//     containerReference.innerHTML = `    
-//     <div>
-//     <li class="tarefa">
-//       <div class="not-done"></div>
-//       <div class="descricao">
-//         <p class="nome">Nova tarefa</p>
-//         <p class="timestamp">Criada em: 15/07/21</p>
-//       </div>
-//     </li>
-//     <li class="tarefa">
-//       <div class="not-done"></div>
-//       <div class="descricao">
-//         <p class="nome">Nova tarefa</p>
-//         <p class="timestamp">Criada em: 15/07/21</p>
-//       </div>
-//     </li>
-//     <li class="tarefa">
-//       <div class="not-done"></div>
-//       <div class="descricao">
-//         <p class="nome">Nova tarefa</p>
-//         <p class="timestamp">Criada em: 15/07/21</p>
-//       </div>
-//     </li>
-
-//   </div>`
-// }

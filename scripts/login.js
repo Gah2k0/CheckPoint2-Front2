@@ -8,8 +8,8 @@ botaoLoginReference.addEventListener('click', event => {
 
     let credentials = {
 
-        email: inputEmailReference.value,
-        password: inputSenhaReference.value
+        email: 'string',
+        password: 'string'
 
     }
 
