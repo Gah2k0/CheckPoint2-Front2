@@ -4,7 +4,8 @@ let emailUsuario;
 let containerReference = document.querySelector('.tarefas-pendentes')
 let finalizarSessaoReference = document.querySelector('#closeApp')
 let criarTarefaReference = document.querySelector('#criaTarefa')
-let inputTarefaReference = document.querySelector('novaTarea')
+let inputTarefaReference = document.querySelector('#novaTarefa')
+
 
 function logOutUser() {
     localStorage.removeItem('token') 
@@ -36,8 +37,6 @@ fetch('https://ctd-todo-api.herokuapp.com/v1/users/getMe', requestConfiguration)
 
             } 
         }
-
-        
 
         response.json().then(
 
@@ -79,46 +78,43 @@ fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfiguration).then(
     }
 )
 
-
-
-
 finalizarSessaoReference.addEventListener('click',  function logOutUser() {
     localStorage.removeItem('token') 
     window.location.href = './index.html'
 })
 
+criarTarefaReference.addEventListener('click', event => {
 
-// criarTarefaReference.addEventListener('click', function(){
+    event.preventDefault()
 
-//     let task = {
-//         description: inputTarefaReference.value,
-//         completed: false
-//     }
+    let task = {
+        description: inputTarefaReference.value,
+        completed: false
+    }
 
-//     let requestConfigurationPost = {
+    let requestConfigurationPost = {
 
-//         headers: {
+        headers: {
 
-//             'Content-Type': 'application/json',
-//             'Authorization': localStorage.getItem('token')
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
             
-//         },
-//         method: 'POST',
-//         body: JSON.stringify(task)
+        },
+        method: 'POST',
+        body: JSON.stringify(task)
 
-//     }
+    }
 
+    fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfigurationPost).then (
 
-//     fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfigurationPost).then (
+        response =>  {
 
-//     )
-// }
-  
+                response.json().then(
+            
+                        task => {
+                            console.log("Success:", task);
+                        }
+                    )
+        })
+});
 
-
-
-// completed: false
-// createdAt: "2022-03-30T20:34:05.693Z"
-// description: "Aprender Javascript"
-// id: 5241
-// userId: 51
