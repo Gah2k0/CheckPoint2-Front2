@@ -1,10 +1,13 @@
 let nomeUsuarioReference = document.querySelector('#nomeUsuario');
 let idUsuario;
 let emailUsuario;
-let containerReference = document.querySelector('.tarefas-pendentes')
+let tarefasPendentesReference = document.querySelector('.tarefas-pendentes')
+let tarefasFinalizadasReference = document.querySelector('.tarefas-terminadas')
 let finalizarSessaoReference = document.querySelector('#closeApp')
 let criarTarefaReference = document.querySelector('#criaTarefa')
 let inputTarefaReference = document.querySelector('#novaTarefa')
+let notDoneReference = document.querySelector('.not-done');
+
 
 
 function logOutUser() {
@@ -41,7 +44,7 @@ fetch('https://ctd-todo-api.herokuapp.com/v1/users/getMe', requestConfiguration)
         response.json().then(
 
             data => {
-                console.log(data)
+                //console.log(data)
                 let nomeCompleto = data.firstName + ' ' + data.lastName;
                 nomeUsuarioReference.innerHTML = nomeCompleto;
                 idUsuario = data.id;
@@ -51,32 +54,25 @@ fetch('https://ctd-todo-api.herokuapp.com/v1/users/getMe', requestConfiguration)
     }
 )
 
-fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfiguration).then(
 
-    response => {
+function getTasks(){
+    fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfiguration).then(
 
-        response.json().then(
+        response => {
 
-            data => {
-                console.log(data)
-                let tarefas = data
-                containerReference.innerHTML = ''
-                for(let tarefa of tarefas) {
-                    containerReference.innerHTML += `    
-                    <div>
-                    <li class="tarefa">
-                      <div class="not-done"></div>
-                      <div class="descricao">
-                        <p class="nome">${tarefa.description}</p>
-                        <p class="timestamp">${tarefa.createdAt}</p>
-                      </div>
-                    </li>
-                  </div>`
+            response.json().then(
+
+                data => {
+                    console.log(data)
+                    renderTasks(data)
                 }
-            }
-        )
-    }
-)
+            )
+        }
+    )
+}
+
+getTasks()
+
 
 finalizarSessaoReference.addEventListener('click',  function logOutUser() {
     localStorage.removeItem('token') 
@@ -113,8 +109,73 @@ criarTarefaReference.addEventListener('click', event => {
             
                         task => {
                             console.log("Success:", task);
+
+                            location.reload()
                         }
                     )
         })
 });
 
+let configuracaoPutAutorizado = {
+
+    headers: {
+
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+        
+    },
+    method: 'PUT',
+    body: JSON.stringify({
+        completed: true
+    })
+}
+
+function updateTask(id) {
+
+    fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, configuracaoPutAutorizado).then(
+
+        response => {
+
+            if(response.ok) {
+
+                getTasks()
+                //console.log(response)
+            }
+
+        }
+     )
+}
+
+function renderTasks(tasks) {
+    tarefasPendentesReference.innerHTML = ''
+    tarefasFinalizadasReference.innerHTML = ''
+    for(task of tasks) {
+        if(task.completed == false) {
+        tarefasPendentesReference.innerHTML += `    
+                    <div>
+                        <li class="tarefa">
+                        <div class="not-done" onclick="updateTask(${task.id})"></div>
+                        <div class="descricao">
+                            <p class="nome">${task.description}</p>
+                            <p class="timestamp">${task.createdAt}</p>
+                            </div>
+                        </li>
+                    </div>`
+        } else {
+            tarefasFinalizadasReference.innerHTML += `    
+            <div>
+            <li class="tarefa">
+            <div class="done" onclick="updateTask(${task.id})"></div>
+            <div class="descricao">
+                <p class="nome">${task.description}</p>
+                <p class="timestamp">${task.createdAt}</p>
+            </div>
+            </li>
+        </div>`
+        }
+    } 
+            
+         
+           
+            
+}
