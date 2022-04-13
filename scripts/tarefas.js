@@ -63,7 +63,7 @@ function getTasks(){
             response.json().then(
 
                 data => {
-                    console.log(data)
+                    //console.log(data)
                     renderTasks(data)
                 }
             )
@@ -147,9 +147,17 @@ function updateTask(id) {
 }
 
 function renderTasks(tasks) {
+
     tarefasPendentesReference.innerHTML = ''
     tarefasFinalizadasReference.innerHTML = ''
+
     for(task of tasks) {
+
+        let dataF = Date.parse(task.createdAt)
+        let dataCerta = new Date(dataF)
+        let dataFormatada = dataCerta.toLocaleDateString('pt-BR', 
+        {day:'2-digit', month:'2-digit', year: 'numeric'})
+
         if(task.completed == false) {
         tarefasPendentesReference.innerHTML += `    
                     <div>
@@ -157,18 +165,24 @@ function renderTasks(tasks) {
                         <div class="not-done" onclick="updateTask(${task.id})"></div>
                         <div class="descricao">
                             <p class="nome">${task.description}</p>
-                            <p class="timestamp">${task.createdAt}</p>
+                            <p class="timestamp">${dataFormatada}</p>
                             </div>
                         </li>
                     </div>`
         } else {
+
+            let dataF = Date.parse(task.createdAt)
+            let dataCerta = new Date(dataF)
+            let dataFormatada = dataCerta.toLocaleDateString('pt-BR', 
+            {day:'2-digit', month:'2-digit', year: 'numeric'})
+
             tarefasFinalizadasReference.innerHTML += `    
             <div>
             <li class="tarefa">
             <div class="done" onclick="updateTask(${task.id})"></div>
             <div class="descricao">
                 <p class="nome">${task.description}</p>
-                <p class="timestamp">${task.createdAt}</p>
+                <p class="timestamp">${dataFormatada}</p>
             </div>
             </li>
         </div>`
