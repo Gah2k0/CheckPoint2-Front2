@@ -71,6 +71,13 @@ button {
 .ingressar{
   text-align: center;
 }
+
+#ingresso{
+  color: var(--primary);
+  border: 2px white;
+  text-decoration: dotted;
+}
+
 .left{
   width: 50%;  
   background-color: white;
