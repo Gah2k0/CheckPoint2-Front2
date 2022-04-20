@@ -17,6 +17,8 @@ function logOutUser() {
     window.location.href = './index.html'
 }
 
+/* desloga usuario caso tente voltar pagina dps de logout */
+if(!localStorage.getItem('token')) window.location.href = './index.html'
 
 
 function changeTheme() {
