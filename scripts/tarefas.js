@@ -6,7 +6,9 @@ let tarefasFinalizadasReference = document.querySelector('.tarefas-terminadas')
 let finalizarSessaoReference = document.querySelector('#closeApp')
 let criarTarefaReference = document.querySelector('#criaTarefa')
 let inputTarefaReference = document.querySelector('#novaTarefa')
-let notDoneReference = document.querySelector('.not-done');
+let notDoneReference = document.querySelector('.not-done')
+let bodyReference = document.querySelector('body')
+let mudarTemaBotaoReference = document.querySelector('#botaoMudarTema')
 
 
 
@@ -14,6 +16,25 @@ function logOutUser() {
     localStorage.removeItem('token') 
     window.location.href = './index.html'
 }
+
+
+
+function changeTheme() {
+
+    bodyReference.classList.toggle('dark')
+
+    if (bodyReference.classList.contains('dark')) {
+
+        mudarTemaBotaoReference.innerText = '☀️'
+
+    } else {
+
+        mudarTemaBotaoReference.innerText = '🌙'
+
+    }
+
+}
+
 
 
 let requestConfiguration = {
@@ -79,42 +100,78 @@ finalizarSessaoReference.addEventListener('click',  function logOutUser() {
     window.location.href = './index.html'
 })
 
+
 criarTarefaReference.addEventListener('click', event => {
 
     event.preventDefault()
 
-    let task = {
-        description: inputTarefaReference.value,
+    if(inputTarefaReference.value != ''){
+
+        let task = {
+            description: inputTarefaReference.value,
+            completed: false
+        }
+
+        let requestConfigurationPost = {
+
+            headers: {
+
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+                
+            },
+            method: 'POST',
+            body: JSON.stringify(task)
+
+        }
+
+        fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfigurationPost).then (
+
+            response =>  {
+
+                    response.json().then(
+                
+                            task => {
+                                console.log("Success:", task);
+
+                                getTasks()
+                                inputTarefaReference.value = ''
+                            }
+                        )
+            })
+    }
+})
+
+
+let configuracaoPutAutorizadoReverse = {
+
+    headers: {
+
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+        
+    },
+    method: 'PUT',
+    body: JSON.stringify({
         completed: false
-    }
+    })
+}
 
-    let requestConfigurationPost = {
+function updateTaskReverse(id) {
 
-        headers: {
+    fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, configuracaoPutAutorizadoReverse).then(
 
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
-            
-        },
-        method: 'POST',
-        body: JSON.stringify(task)
+        response => {
 
-    }
+            if(response.ok) {
 
-    fetch('https://ctd-todo-api.herokuapp.com/v1/tasks', requestConfigurationPost).then (
+                getTasks()
+                //console.log(response)
+            }
 
-        response =>  {
-
-                response.json().then(
-            
-                        task => {
-                            console.log("Success:", task);
-
-                            location.reload()
-                        }
-                    )
-        })
-});
+        }
+     )
+}
 
 let configuracaoPutAutorizado = {
 
@@ -158,23 +215,44 @@ let configuracaoDeleteAutorizado = {
 
 function deleteTask(id) {
 
-    if(confirm("Deseja apagar essa tarefa?")){
-        fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, configuracaoDeleteAutorizado).then(
 
-            response => {
+    Swal.fire({
+        title: 'Tem certeza que deseja excluir esta tarefa?',
+        text: "Esta operação não poderá ser desfeita!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`, configuracaoDeleteAutorizado).then(
 
-                if(response.ok) {
+                response => {
 
-                    getTasks()
-                    //console.log(response)
+                    if(response.ok) {
+
+                        Swal.fire(
+                            'Tarefa excluída!',
+                            'A sua tarefa foi excluída com sucesso.',
+                            'success'
+                        )
+
+                        getTasks()
+                        //console.log(response)
+                    }
+            
                 }
-
-            }
-        )
+            )   
+        }
+      })        
+    
     }
     
+    
 
-}
+
 
 function renderTasks(tasks) {
 
@@ -190,7 +268,7 @@ function renderTasks(tasks) {
 
         if(task.completed == false) {
         tarefasPendentesReference.innerHTML += `    
-                    <div>
+                    <div data-aos="fade-up" data-aos-duration="3000">
                         <li class="tarefa">
                             <div class="not-done" onclick="updateTask(${task.id})"></div>
                             <div class="descricao">
@@ -208,9 +286,9 @@ function renderTasks(tasks) {
             {day:'2-digit', month:'2-digit', year: 'numeric'})
 
             tarefasFinalizadasReference.innerHTML += `    
-            <div>
+            <div data-aos="fade-up" data-aos-duration="3000">
             <li class="tarefa">
-                <div class="done" onclick="updateTask(${task.id})"></div>
+                <div class="not-done" onclick="updateTaskReverse(${task.id})"></div>
                 <div class="descricao">
                     <p class="nome">${task.description}</p>
                     <p class="timestamp">Criada em: ${dataFormatada}</p>

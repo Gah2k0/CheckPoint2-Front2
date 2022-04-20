@@ -1,10 +1,25 @@
 @import url('./common.css');
+
+body {
+  padding-bottom: 200px;
+  transition: ease-in 0.5s;
+}
+
 header {
   display: flex;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   box-shadow: 0px 3px 5px lightgrey;
   padding: 0 3em;
   margin-bottom: 2em;
+}
+
+.botao-tema {
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
+  background-color: white;
+  margin-left: .5em;
+  margin-top: .7em;
 }
 
 a {
@@ -110,6 +125,8 @@ a {
   color: grey;
 }
 
+
+
 /* Lista de tarefas ----------------------------------------------------------- */
 
 .tarefas-pendentes {
@@ -171,6 +188,7 @@ a {
   background-color: white;
   padding: 1em 2em;
   box-shadow: 2px 2px 5px lightgrey;
+  border-radius: 0.5em;
 }
 
 .tarefa .nome {
@@ -246,4 +264,66 @@ a {
 /* Lixeira para deletar tarefas ----------------------------------------------------------- */
 .tarefa img {
   cursor: pointer;
+}
+
+.dark {
+
+  background-color: black;
+  box-shadow: none;
+
+}
+
+.dark .botao-tema {
+  
+  background-color: #202020;
+  color: white;
+  box-shadow: none;
+}
+
+.dark .nova-tarefa {
+  background-color: rgb(49, 49, 49);
+  border-color: black;
+  box-shadow: none;
+}
+
+.dark .nova-tarefa #novaTarefa {
+  background-color: rgb(49, 49, 49);
+  border-color: black;
+  box-shadow: none;
+  color: white;
+}
+
+.dark .tarefa .descricao {
+  background-color: rgb(31, 31, 31);
+  border-color: black;
+  box-shadow: none;
+  color: white;
+}
+
+.dark .tarefa .descricao .nome, .dark .tarefa .descricao .timestamp {
+  background-color: rgb(31, 31, 31);
+  border-color: black;
+  box-shadow: none;
+  color: white;
+}
+
+.dark .tarefa .nova-tarefa button img {
+  color: white;
+  background-color: white;
+  box-shadow: none;
+
+}
+
+.dark .tarefa .not-done {
+
+  box-shadow: none;
+  color: white;
+
+}
+
+.dark .titulo-terminadas {
+
+  box-shadow: none;
+  color: white;
+  background-color: #202020;
 }
