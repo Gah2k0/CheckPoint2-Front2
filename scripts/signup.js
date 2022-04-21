@@ -56,7 +56,7 @@ botaoCriarContaReference.addEventListener('click', event => {
         alert("Preencha todos os campos!")
         return false
     }
-    
+
     let credentials = {
 
         firstName: inputNomeReference.value,
@@ -90,10 +90,18 @@ botaoCriarContaReference.addEventListener('click', event => {
                     console.log(credentials)
                     localStorage.setItem('token', data.jwt)
                     alert('Usuário criado com sucesso!')
+                    
                 }
 
             )
 
         }
     )
+
+    inputNomeReference.value = ''
+    inputSobrenomeReference.value = ''
+    inputEmailReference.value = ''
+    inputSenhaReference.value = ''
+    inputRepitaSenhaReference.value = ''
+
 })
