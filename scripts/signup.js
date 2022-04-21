@@ -75,7 +75,7 @@ botaoCriarContaReference.addEventListener('click', event => {
         headers: requestHeaders
 
     }
-
+   
     fetch('https://ctd-todo-api.herokuapp.com/v1/users', requestConfiguration).then( 
         
         response => {
@@ -85,7 +85,7 @@ botaoCriarContaReference.addEventListener('click', event => {
                 data => {
                     console.log(credentials)
                     localStorage.setItem('token', data.jwt)
-
+                    alert('Usuário criado com sucesso!')
                 }
 
             )
