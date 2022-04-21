@@ -6,6 +6,11 @@ botaoLoginReference.addEventListener('click', event => {
 
     event.preventDefault()
 
+    if(inputEmailReference.value == '' || inputSenhaReference == '') {
+        alert('Preencha os seus dados para logar')
+        return false
+    }
+
     let credentials = {
 
         email: inputEmailReference.value,
