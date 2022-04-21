@@ -52,7 +52,11 @@ for(let controladorReference of controladoresReference) {
 botaoCriarContaReference.addEventListener('click', event => {
 
     event.preventDefault()
-
+    if(inputEmailReference.value == '' || inputSobrenomeReference == '' || inputNomeReference == '' || inputSenhaReference == '') {
+        alert("Preencha todos os campos!")
+        return false
+    }
+    
     let credentials = {
 
         firstName: inputNomeReference.value,
